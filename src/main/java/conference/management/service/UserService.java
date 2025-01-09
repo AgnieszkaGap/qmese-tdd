@@ -52,12 +52,24 @@ public class UserService {
     @Transactional
     public User updateUser(String email, String newEmail) {
         //TODO: provide implementation for updating user
+        UserEntity userEntity = findUser(email);
+        userEntity.setEmail(newEmail);
+        userRepository.save(userEntity);
+
         return null;
     }
 
     @Transactional
     public void registerForLecture(String login, LectureRequest lectureRequest) {
         //TODO: provide implementation for lecture registration
+        UserEntity userEntity = findUser(login);
+        LectureEntity lectureEntity = findLecture(lectureRequest.pathNumber(), lectureRequest.lectureNumber());
+
+        Set<LectureEntity> lectures = userEntity.getLectures();
+        lectures.add(lectureEntity);
+        userEntity.setLectures(lectures);
+        userRepository.save(userEntity);
+
     }
 
     @Transactional
